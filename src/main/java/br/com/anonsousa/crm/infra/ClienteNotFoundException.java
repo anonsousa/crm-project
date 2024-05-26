@@ -3,10 +3,10 @@ package br.com.anonsousa.crm.infra;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-@ResponseStatus(HttpStatus.CONFLICT)
-public class InvalidEmailException extends RuntimeException {
+@ResponseStatus(HttpStatus.NOT_FOUND)
+public class ClienteNotFoundException extends RuntimeException{
 
-    public InvalidEmailException(String message){
+    public ClienteNotFoundException(String message){
         super(message);
     }
 }
