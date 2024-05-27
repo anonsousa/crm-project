@@ -1,5 +1,6 @@
 package br.com.anonsousa.crm.domain.service;
 
+import br.com.anonsousa.crm.domain.dto.ClienteAtualizarDTO;
 import br.com.anonsousa.crm.domain.dto.ClienteCadastroDTO;
 import br.com.anonsousa.crm.domain.dto.ClienteRetornoDTO;
 import br.com.anonsousa.crm.domain.model.Cliente;
@@ -15,6 +16,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.Objects;
 
 @Service
 public class ClienteService {
@@ -57,6 +59,25 @@ public class ClienteService {
             return new ClienteRetornoDTO(clienteOp.get());
         }
         throw new ClienteNotFoundException(String.format("Cliente com o id %d não foi encontrado em nossos registros", id));
+    }
+
+    public ClienteRetornoDTO updateCliente(ClienteAtualizarDTO clienteAtualizarDTO){
+        var clienteOp = clienteRepository.findById(clienteAtualizarDTO.id());
+        if (clienteOp.isPresent() && Objects.equals(clienteOp.get().getEmail(), clienteAtualizarDTO.email())){
+            var cliente = new Cliente();
+            BeanUtils.copyProperties(clienteOp.get(), cliente);
+            cliente.setDataRegistro(LocalDate.now());
+            return new ClienteRetornoDTO(clienteRepository.save(cliente));
+        }
+        throw new ClienteNotFoundException(String.format("Cliente com o id: %d não foi encontrado em nossos registros", clienteAtualizarDTO.id()));
+    }
+
+    public void deleteById(Long id){
+        var clienteOp = clienteRepository.findById(id);
+        if (clienteOp.isPresent()){
+            clienteRepository.deleteById(id);
+        }
+        throw new ClienteNotFoundException(String.format("Cliente com o id: %d não encontrado!", id));
     }
 
 

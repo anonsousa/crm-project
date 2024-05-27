@@ -1,6 +1,7 @@
 package br.com.anonsousa.crm.controllers;
 
 
+import br.com.anonsousa.crm.domain.dto.ClienteAtualizarDTO;
 import br.com.anonsousa.crm.domain.dto.ClienteCadastroDTO;
 import br.com.anonsousa.crm.domain.dto.ClienteRetornoDTO;
 import br.com.anonsousa.crm.domain.service.ClienteService;
@@ -31,5 +32,15 @@ public class ClienteController {
     @GetMapping("/cliente")
     public ResponseEntity<Page<ClienteRetornoDTO>> findAll(Pageable pageable){
         return ResponseEntity.status(HttpStatus.OK).body(clienteService.findAllClientes(pageable));
+    }
+
+    @PutMapping("/cliente")
+    public ResponseEntity<ClienteRetornoDTO> update(@RequestBody @Valid ClienteAtualizarDTO clienteAtualizarDTO){
+        return ResponseEntity.status(HttpStatus.OK).body(clienteService.updateCliente(clienteAtualizarDTO));
+    }
+
+    @DeleteMapping("/cliente/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Long id){
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }
