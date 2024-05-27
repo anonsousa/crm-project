@@ -9,6 +9,9 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PagedResourcesAssembler;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.PagedModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,6 +21,9 @@ import org.springframework.web.bind.annotation.*;
 public class ClienteController {
     @Autowired
     private ClienteService clienteService;
+
+    @Autowired
+    private PagedResourcesAssembler<ClienteRetornoDTO> pagedResourcesAssembler;
 
     @PostMapping("/cliente")
     public ResponseEntity<ClienteRetornoDTO> save(@RequestBody @Valid ClienteCadastroDTO clienteCadastroDTO){
@@ -30,8 +36,9 @@ public class ClienteController {
     }
 
     @GetMapping("/cliente")
-    public ResponseEntity<Page<ClienteRetornoDTO>> findAll(Pageable pageable){
-        return ResponseEntity.status(HttpStatus.OK).body(clienteService.findAllClientes(pageable));
+    public PagedModel<EntityModel<ClienteRetornoDTO>> findAll(Pageable pageable){
+        Page<ClienteRetornoDTO> page = clienteService.findAllClientes(pageable);
+        return pagedResourcesAssembler.toModel(page);
     }
 
     @PutMapping("/cliente")

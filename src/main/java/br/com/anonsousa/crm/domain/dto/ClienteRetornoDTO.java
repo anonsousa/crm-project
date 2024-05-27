@@ -3,9 +3,11 @@ package br.com.anonsousa.crm.domain.dto;
 import br.com.anonsousa.crm.domain.model.Cliente;
 import br.com.anonsousa.crm.domain.model.Endereco;
 import br.com.anonsousa.crm.domain.model.StatusCliente;
+import org.springframework.hateoas.server.core.Relation;
 
 import java.time.LocalDate;
 
+@Relation(collectionRelation = "clientes")
 public record ClienteRetornoDTO(
 
         Long id,
