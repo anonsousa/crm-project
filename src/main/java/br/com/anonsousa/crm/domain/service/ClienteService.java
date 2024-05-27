@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.Objects;
@@ -24,6 +25,7 @@ public class ClienteService {
     @Autowired
     private ClienteRepository clienteRepository;
 
+    @Transactional
     public ClienteRetornoDTO save(ClienteCadastroDTO clienteCadastroDTO){
         var validateEmail = clienteRepository.findByEmail(clienteCadastroDTO.email());
         if (validateEmail != null){
@@ -61,6 +63,7 @@ public class ClienteService {
         throw new ClienteNotFoundException(String.format("Cliente com o id %d não foi encontrado em nossos registros", id));
     }
 
+    @Transactional
     public ClienteRetornoDTO updateCliente(ClienteAtualizarDTO clienteAtualizarDTO){
         var clienteOp = clienteRepository.findById(clienteAtualizarDTO.id());
         if (clienteOp.isPresent() && Objects.equals(clienteOp.get().getEmail(), clienteAtualizarDTO.email())){
@@ -72,6 +75,7 @@ public class ClienteService {
         throw new ClienteNotFoundException(String.format("Cliente com o id: %d não foi encontrado em nossos registros", clienteAtualizarDTO.id()));
     }
 
+    @Transactional
     public void deleteById(Long id){
         var clienteOp = clienteRepository.findById(id);
         if (clienteOp.isPresent()){

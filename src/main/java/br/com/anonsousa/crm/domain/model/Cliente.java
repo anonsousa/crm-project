@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.util.Set;
 
 @Entity
 @Table(name = "table_cliente")
@@ -36,6 +37,9 @@ public class Cliente {
     private StatusCliente statusCliente;
 
     private String preferenciaContato;
+
+    @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Interacoes> interacoes;
 
 
     public Long getId() {
@@ -140,5 +144,13 @@ public class Cliente {
 
     public void setPreferenciaContato(String preferenciaContato) {
         this.preferenciaContato = preferenciaContato;
+    }
+
+    public Set<Interacoes> getInteracoes() {
+        return interacoes;
+    }
+
+    public void setInteracoes(Set<Interacoes> interacoes) {
+        this.interacoes = interacoes;
     }
 }

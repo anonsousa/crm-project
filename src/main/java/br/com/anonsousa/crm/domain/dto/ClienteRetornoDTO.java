@@ -2,10 +2,13 @@ package br.com.anonsousa.crm.domain.dto;
 
 import br.com.anonsousa.crm.domain.model.Cliente;
 import br.com.anonsousa.crm.domain.model.Endereco;
+import br.com.anonsousa.crm.domain.model.Interacoes;
 import br.com.anonsousa.crm.domain.model.StatusCliente;
 import org.springframework.hateoas.server.core.Relation;
 
 import java.time.LocalDate;
+import java.util.List;
+import java.util.Set;
 
 @Relation(collectionRelation = "clientes")
 public record ClienteRetornoDTO(
