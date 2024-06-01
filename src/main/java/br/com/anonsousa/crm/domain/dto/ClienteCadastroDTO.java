@@ -17,6 +17,7 @@ public record ClienteCadastroDTO(
         String email,
 
         @NotBlank
+        @Pattern(regexp = "[\\d\\s()-]+", message = "O campo deve conter apenas dígitos, espaços, parênteses e hífens")
         String telefone,
 
         EnderecoDTO endereco,

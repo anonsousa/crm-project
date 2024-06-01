@@ -1,12 +1,16 @@
 package br.com.anonsousa.crm.domain.dto;
 
+import br.com.anonsousa.crm.domain.model.Cliente;
 import br.com.anonsousa.crm.domain.model.TipoInteracao;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDateTime;
 
-public record InteracaoCadastroDTO(
+
+public record InteracaoAtualizarDTO(
+
+        Long id,
 
         @NotNull
         TipoInteracao tipo,

@@ -1,5 +1,6 @@
 package br.com.anonsousa.crm.controllers;
 
+import br.com.anonsousa.crm.domain.dto.InteracaoAtualizarDTO;
 import br.com.anonsousa.crm.domain.dto.InteracaoCadastroDTO;
 import br.com.anonsousa.crm.domain.dto.InteracoesRetornoDTO;
 import br.com.anonsousa.crm.domain.model.Interacoes;
@@ -42,9 +43,15 @@ public class InteracoesController {
         return pagedResourcesAssembler.toModel(interacoesRetornoDTOS);
     }
 
+    @GetMapping("/cliente/{id}")
+    public PagedModel<EntityModel<InteracoesRetornoDTO>> findByClienteId(@PathVariable Long id, Pageable pageable){
+        Page<InteracoesRetornoDTO> interacoesRetornoDTOS = interacoesService.findByIdCliente(id, pageable);
+        return pagedResourcesAssembler.toModel(interacoesRetornoDTOS);
+    }
+
     @PutMapping
-    public ResponseEntity<InteracoesRetornoDTO> update(@RequestBody @Valid InteracoesRetornoDTO interacoesRetornoDTO){
-        return ResponseEntity.status(HttpStatus.OK).body(interacoesService.updateInteracao(interacoesRetornoDTO));
+    public ResponseEntity<InteracoesRetornoDTO> update(@RequestBody @Valid InteracaoAtualizarDTO interacaoAtualizarDTO){
+        return ResponseEntity.status(HttpStatus.OK).body(interacoesService.updateInteracao(interacaoAtualizarDTO));
     }
 
     @DeleteMapping("/{id}")

@@ -1,7 +1,9 @@
 package br.com.anonsousa.crm.domain.service;
 
+import br.com.anonsousa.crm.domain.dto.InteracaoAtualizarDTO;
 import br.com.anonsousa.crm.domain.dto.InteracaoCadastroDTO;
 import br.com.anonsousa.crm.domain.dto.InteracoesRetornoDTO;
+import br.com.anonsousa.crm.domain.model.Cliente;
 import br.com.anonsousa.crm.domain.model.Interacoes;
 import br.com.anonsousa.crm.domain.repository.ClienteRepository;
 import br.com.anonsousa.crm.domain.repository.InteracoesRepository;
@@ -14,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Service
 public class InteracoesService {
@@ -63,14 +66,28 @@ public class InteracoesService {
         return interacoesRepository.findAll(pageable).map(InteracoesRetornoDTO::new);
     }
 
+    public Page<InteracoesRetornoDTO> findByIdCliente(Long id, Pageable pageable){
+        return interacoesRepository.findByClienteId(id, pageable).map(InteracoesRetornoDTO::new);
+    }
+
     @Transactional
-    public InteracoesRetornoDTO updateInteracao(InteracoesRetornoDTO interacoesRetornoDTO){
-        var interacaoOp = interacoesRepository.findById(interacoesRetornoDTO.id());
+    public InteracoesRetornoDTO updateInteracao(InteracaoAtualizarDTO interacaoAtualizarDTO){
+        var interacaoOp = interacoesRepository.findById(interacaoAtualizarDTO.id());
+
         if (interacaoOp.isPresent()){
             var interacao = new Interacoes();
-            BeanUtils.copyProperties(interacoesRetornoDTO, interacao);
+            var cliente = clienteRepository.findById(interacaoAtualizarDTO.clienteId()).orElseThrow(() -> new ClienteNotFoundException("Cliente não encontrado"));
+
+            BeanUtils.copyProperties(interacaoAtualizarDTO, interacao);
+            interacao.setCliente(cliente);
+
+            if (interacao.getDataHora() == null){
+                interacao.setDataHora(LocalDateTime.now().withNano(0));
+            }
+
             return new InteracoesRetornoDTO(interacoesRepository.save(interacao));
         }
+
         throw new ClienteNotFoundException("Interação não encontrada!");
     }
 
