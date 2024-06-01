@@ -6,7 +6,7 @@ import jakarta.validation.constraints.*;
 
 import java.time.LocalDate;
 
-public record ClienteCadastroDTO(
+public record ClienteCadastroDto(
         @NotBlank
         @Size(min = 3, max = 80)
         String nome,
@@ -20,7 +20,7 @@ public record ClienteCadastroDTO(
         @Pattern(regexp = "[\\d\\s()-]+", message = "O campo deve conter apenas dígitos, espaços, parênteses e hífens")
         String telefone,
 
-        EnderecoDTO endereco,
+        EnderecoDto endereco,
 
         @NotBlank
         @Size(min = 2, max = 80)

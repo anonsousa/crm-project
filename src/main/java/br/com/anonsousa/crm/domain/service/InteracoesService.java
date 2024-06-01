@@ -1,9 +1,8 @@
 package br.com.anonsousa.crm.domain.service;
 
-import br.com.anonsousa.crm.domain.dto.InteracaoAtualizarDTO;
-import br.com.anonsousa.crm.domain.dto.InteracaoCadastroDTO;
-import br.com.anonsousa.crm.domain.dto.InteracoesRetornoDTO;
-import br.com.anonsousa.crm.domain.model.Cliente;
+import br.com.anonsousa.crm.domain.dto.InteracaoAtualizarDto;
+import br.com.anonsousa.crm.domain.dto.InteracaoCadastroDto;
+import br.com.anonsousa.crm.domain.dto.InteracoesRetornoDto;
 import br.com.anonsousa.crm.domain.model.Interacoes;
 import br.com.anonsousa.crm.domain.repository.ClienteRepository;
 import br.com.anonsousa.crm.domain.repository.InteracoesRepository;
@@ -16,7 +15,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
 
 @Service
 public class InteracoesService {
@@ -30,7 +28,7 @@ public class InteracoesService {
     private TimeValidation timeValidation;
 
     @Transactional
-    public InteracoesRetornoDTO save(InteracaoCadastroDTO interacaoCadastroDTO){
+    public InteracoesRetornoDto save(InteracaoCadastroDto interacaoCadastroDTO){
 
         var time = LocalDateTime.now();
         timeValidation.validateHourInteraction(time);
@@ -48,30 +46,30 @@ public class InteracoesService {
                 interacao.setDataHora(time.withNano(0));
             }
 
-            return new InteracoesRetornoDTO(interacoesRepository.save(interacao));
+            return new InteracoesRetornoDto(interacoesRepository.save(interacao));
 
         }
         throw new ClienteNotFoundException("Cliente não encontrado!");
     }
 
-    public InteracoesRetornoDTO findById(Long id){
+    public InteracoesRetornoDto findById(Long id){
         var interacaoOp = interacoesRepository.findById(id);
         if (interacaoOp.isPresent()){
-            return new InteracoesRetornoDTO(interacaoOp.get());
+            return new InteracoesRetornoDto(interacaoOp.get());
         }
         throw new ClienteNotFoundException(String.format("Interação com o id: %d não encontrada em nossos registros", id));
     }
 
-    public Page<InteracoesRetornoDTO> findAllInteracoes(Pageable pageable){
-        return interacoesRepository.findAll(pageable).map(InteracoesRetornoDTO::new);
+    public Page<InteracoesRetornoDto> findAllInteracoes(Pageable pageable){
+        return interacoesRepository.findAll(pageable).map(InteracoesRetornoDto::new);
     }
 
-    public Page<InteracoesRetornoDTO> findByIdCliente(Long id, Pageable pageable){
-        return interacoesRepository.findByClienteId(id, pageable).map(InteracoesRetornoDTO::new);
+    public Page<InteracoesRetornoDto> findByIdCliente(Long id, Pageable pageable){
+        return interacoesRepository.findByClienteId(id, pageable).map(InteracoesRetornoDto::new);
     }
 
     @Transactional
-    public InteracoesRetornoDTO updateInteracao(InteracaoAtualizarDTO interacaoAtualizarDTO){
+    public InteracoesRetornoDto updateInteracao(InteracaoAtualizarDto interacaoAtualizarDTO){
         var interacaoOp = interacoesRepository.findById(interacaoAtualizarDTO.id());
 
         if (interacaoOp.isPresent()){
@@ -85,7 +83,7 @@ public class InteracoesService {
                 interacao.setDataHora(LocalDateTime.now().withNano(0));
             }
 
-            return new InteracoesRetornoDTO(interacoesRepository.save(interacao));
+            return new InteracoesRetornoDto(interacoesRepository.save(interacao));
         }
 
         throw new ClienteNotFoundException("Interação não encontrada!");

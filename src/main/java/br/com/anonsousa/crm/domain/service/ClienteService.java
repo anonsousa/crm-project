@@ -1,8 +1,8 @@
 package br.com.anonsousa.crm.domain.service;
 
-import br.com.anonsousa.crm.domain.dto.ClienteAtualizarDTO;
-import br.com.anonsousa.crm.domain.dto.ClienteCadastroDTO;
-import br.com.anonsousa.crm.domain.dto.ClienteRetornoDTO;
+import br.com.anonsousa.crm.domain.dto.ClienteAtualizarDto;
+import br.com.anonsousa.crm.domain.dto.ClienteCadastroDto;
+import br.com.anonsousa.crm.domain.dto.ClienteRetornoDto;
 import br.com.anonsousa.crm.domain.model.Cliente;
 import br.com.anonsousa.crm.domain.model.Endereco;
 import br.com.anonsousa.crm.domain.model.StatusCliente;
@@ -27,7 +27,7 @@ public class ClienteService {
     private ClienteRepository clienteRepository;
 
     @Transactional
-    public ClienteRetornoDTO save(ClienteCadastroDTO clienteCadastroDTO){
+    public ClienteRetornoDto save(ClienteCadastroDto clienteCadastroDTO){
         var validateEmail = clienteRepository.findByEmail(clienteCadastroDTO.email());
         var validatePhone = clienteRepository.findByTelefone(clienteCadastroDTO.telefone());
         if (validateEmail != null){
@@ -53,30 +53,30 @@ public class ClienteService {
         }
         cliente.setDataRegistro(LocalDate.now());
 
-        return new ClienteRetornoDTO(clienteRepository.save(cliente));
+        return new ClienteRetornoDto(clienteRepository.save(cliente));
 
     }
 
-    public Page<ClienteRetornoDTO> findAllClientes(Pageable pageable){
-        return clienteRepository.findAll(pageable).map(ClienteRetornoDTO::new);
+    public Page<ClienteRetornoDto> findAllClientes(Pageable pageable){
+        return clienteRepository.findAll(pageable).map(ClienteRetornoDto::new);
     }
 
-    public ClienteRetornoDTO findById(Long id){
+    public ClienteRetornoDto findById(Long id){
         var clienteOp = clienteRepository.findById(id);
         if (clienteOp.isPresent()){
-            return new ClienteRetornoDTO(clienteOp.get());
+            return new ClienteRetornoDto(clienteOp.get());
         }
         throw new ClienteNotFoundException(String.format("Cliente com o id %d não foi encontrado em nossos registros", id));
     }
 
     @Transactional
-    public ClienteRetornoDTO updateCliente(ClienteAtualizarDTO clienteAtualizarDTO){
+    public ClienteRetornoDto updateCliente(ClienteAtualizarDto clienteAtualizarDTO){
         var clienteOp = clienteRepository.findById(clienteAtualizarDTO.id());
         if (clienteOp.isPresent() && Objects.equals(clienteOp.get().getEmail(), clienteAtualizarDTO.email())){
             var cliente = new Cliente();
             BeanUtils.copyProperties(clienteOp.get(), cliente);
             cliente.setDataRegistro(LocalDate.now());
-            return new ClienteRetornoDTO(clienteRepository.save(cliente));
+            return new ClienteRetornoDto(clienteRepository.save(cliente));
         }
         throw new ClienteNotFoundException(String.format("Cliente com o id: %d não foi encontrado em nossos registros", clienteAtualizarDTO.id()));
     }

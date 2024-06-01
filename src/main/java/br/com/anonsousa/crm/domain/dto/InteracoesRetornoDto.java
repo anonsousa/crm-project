@@ -8,7 +8,7 @@ import org.springframework.hateoas.server.core.Relation;
 import java.time.LocalDateTime;
 
 @Relation(collectionRelation = "ClienteInterações")
-public record InteracoesRetornoDTO(
+public record InteracoesRetornoDto(
 
         Long id,
         TipoInteracao tipo,
@@ -18,7 +18,7 @@ public record InteracoesRetornoDTO(
         String participantes,
         Cliente cliente
 ) {
-    public InteracoesRetornoDTO(Interacoes interacoes){
+    public InteracoesRetornoDto(Interacoes interacoes){
         this(
                 interacoes.getId(),
                 interacoes.getTipo(),

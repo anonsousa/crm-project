@@ -1,9 +1,9 @@
 package br.com.anonsousa.crm.controllers;
 
 
-import br.com.anonsousa.crm.domain.dto.ClienteAtualizarDTO;
-import br.com.anonsousa.crm.domain.dto.ClienteCadastroDTO;
-import br.com.anonsousa.crm.domain.dto.ClienteRetornoDTO;
+import br.com.anonsousa.crm.domain.dto.ClienteAtualizarDto;
+import br.com.anonsousa.crm.domain.dto.ClienteCadastroDto;
+import br.com.anonsousa.crm.domain.dto.ClienteRetornoDto;
 import br.com.anonsousa.crm.domain.service.ClienteService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,26 +23,26 @@ public class ClienteController {
     private ClienteService clienteService;
 
     @Autowired
-    private PagedResourcesAssembler<ClienteRetornoDTO> pagedResourcesAssembler;
+    private PagedResourcesAssembler<ClienteRetornoDto> pagedResourcesAssembler;
 
     @PostMapping("/cliente")
-    public ResponseEntity<ClienteRetornoDTO> save(@RequestBody @Valid ClienteCadastroDTO clienteCadastroDTO){
+    public ResponseEntity<ClienteRetornoDto> save(@RequestBody @Valid ClienteCadastroDto clienteCadastroDTO){
         return ResponseEntity.status(HttpStatus.CREATED).body(clienteService.save(clienteCadastroDTO));
     }
 
     @GetMapping("/cliente/{id}")
-    public ResponseEntity<ClienteRetornoDTO> findById(@PathVariable Long id){
+    public ResponseEntity<ClienteRetornoDto> findById(@PathVariable Long id){
         return ResponseEntity.status(HttpStatus.OK).body(clienteService.findById(id));
     }
 
     @GetMapping("/cliente")
-    public PagedModel<EntityModel<ClienteRetornoDTO>> findAll(Pageable pageable){
-        Page<ClienteRetornoDTO> page = clienteService.findAllClientes(pageable);
+    public PagedModel<EntityModel<ClienteRetornoDto>> findAll(Pageable pageable){
+        Page<ClienteRetornoDto> page = clienteService.findAllClientes(pageable);
         return pagedResourcesAssembler.toModel(page);
     }
 
     @PutMapping("/cliente")
-    public ResponseEntity<ClienteRetornoDTO> update(@RequestBody @Valid ClienteAtualizarDTO clienteAtualizarDTO){
+    public ResponseEntity<ClienteRetornoDto> update(@RequestBody @Valid ClienteAtualizarDto clienteAtualizarDTO){
         return ResponseEntity.status(HttpStatus.OK).body(clienteService.updateCliente(clienteAtualizarDTO));
     }
 

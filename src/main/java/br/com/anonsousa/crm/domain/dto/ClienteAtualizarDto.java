@@ -5,7 +5,7 @@ import jakarta.validation.constraints.*;
 
 import java.time.LocalDate;
 
-public record ClienteAtualizarDTO(
+public record ClienteAtualizarDto(
 
         @NotNull
         Long id,
@@ -23,7 +23,7 @@ public record ClienteAtualizarDTO(
         @Pattern(regexp = "[\\d\\s()-]+", message = "O campo deve conter apenas dígitos, espaços, parênteses e hífens")
         String telefone,
 
-        EnderecoDTO endereco,
+        EnderecoDto endereco,
 
         @NotBlank
         @Size(min = 2, max = 80)
