@@ -5,7 +5,7 @@ import br.com.anonsousa.crm.domain.dto.InteracoesRetornoDTO;
 import br.com.anonsousa.crm.domain.model.Interacoes;
 import br.com.anonsousa.crm.domain.repository.ClienteRepository;
 import br.com.anonsousa.crm.domain.repository.InteracoesRepository;
-import br.com.anonsousa.crm.infra.ClienteNotFoundException;
+import br.com.anonsousa.crm.infra.exceptions.ClienteNotFoundException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -23,17 +23,30 @@ public class InteracoesService {
     @Autowired
     private ClienteRepository clienteRepository;
 
+    @Autowired
+    private TimeValidation timeValidation;
+
     @Transactional
     public InteracoesRetornoDTO save(InteracaoCadastroDTO interacaoCadastroDTO){
+
+        var time = LocalDateTime.now();
+        timeValidation.validateHourInteraction(time);
+
         var clienteOp = clienteRepository.findById(interacaoCadastroDTO.clienteId());
+
         if (clienteOp.isPresent()){
+
             var interacao = new Interacoes();
             BeanUtils.copyProperties(interacaoCadastroDTO, interacao);
             interacao.setCliente(clienteOp.get());
+
             if (interacaoCadastroDTO.dataHora() == null){
-                interacao.setDataHora(LocalDateTime.now().withNano(0));
+
+                interacao.setDataHora(time.withNano(0));
             }
+
             return new InteracoesRetornoDTO(interacoesRepository.save(interacao));
+
         }
         throw new ClienteNotFoundException("Cliente não encontrado!");
     }

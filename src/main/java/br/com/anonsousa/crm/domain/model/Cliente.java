@@ -20,6 +20,7 @@ public class Cliente {
     private String nome;
     @Column(unique = true)
     private String email;
+    @Column(unique = true)
     private String telefone;
 
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)

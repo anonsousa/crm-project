@@ -7,8 +7,9 @@ import br.com.anonsousa.crm.domain.model.Cliente;
 import br.com.anonsousa.crm.domain.model.Endereco;
 import br.com.anonsousa.crm.domain.model.StatusCliente;
 import br.com.anonsousa.crm.domain.repository.ClienteRepository;
-import br.com.anonsousa.crm.infra.ClienteNotFoundException;
-import br.com.anonsousa.crm.infra.InvalidEmailException;
+import br.com.anonsousa.crm.infra.exceptions.ClienteNotFoundException;
+import br.com.anonsousa.crm.infra.exceptions.InvalidEmailException;
+import br.com.anonsousa.crm.infra.exceptions.InvalidPhoneException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -28,9 +29,14 @@ public class ClienteService {
     @Transactional
     public ClienteRetornoDTO save(ClienteCadastroDTO clienteCadastroDTO){
         var validateEmail = clienteRepository.findByEmail(clienteCadastroDTO.email());
+        var validatePhone = clienteRepository.findByTelefone(clienteCadastroDTO.telefone());
         if (validateEmail != null){
             throw new InvalidEmailException("Email já existe nos nossos registros!");
         }
+        if (validatePhone != null){
+            throw new InvalidPhoneException("Telefone já existe nos nossos registros!");
+        }
+
 
         var cliente = new Cliente();
         BeanUtils.copyProperties(clienteCadastroDTO, cliente);
@@ -83,7 +89,5 @@ public class ClienteService {
         }
         throw new ClienteNotFoundException(String.format("Cliente com o id: %d não encontrado!", id));
     }
-
-
 
 }

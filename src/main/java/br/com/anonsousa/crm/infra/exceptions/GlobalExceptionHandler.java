@@ -1,4 +1,4 @@
-package br.com.anonsousa.crm.infra;
+package br.com.anonsousa.crm.infra.exceptions;
 
 
 import org.springframework.http.HttpStatus;
