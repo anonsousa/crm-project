@@ -41,4 +41,15 @@ public class InteracoesController {
         Page<InteracoesRetornoDTO> interacoesRetornoDTOS = interacoesService.findAllInteracoes(pageable);
         return pagedResourcesAssembler.toModel(interacoesRetornoDTOS);
     }
+
+    @PutMapping
+    public ResponseEntity<InteracoesRetornoDTO> update(@RequestBody @Valid InteracoesRetornoDTO interacoesRetornoDTO){
+        return ResponseEntity.status(HttpStatus.OK).body(interacoesService.updateInteracao(interacoesRetornoDTO));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteById(@PathVariable Long id){
+        interacoesService.deleteById(id);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
 }

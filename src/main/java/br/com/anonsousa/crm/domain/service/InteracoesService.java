@@ -50,8 +50,23 @@ public class InteracoesService {
         return interacoesRepository.findAll(pageable).map(InteracoesRetornoDTO::new);
     }
 
+    @Transactional
     public InteracoesRetornoDTO updateInteracao(InteracoesRetornoDTO interacoesRetornoDTO){
         var interacaoOp = interacoesRepository.findById(interacoesRetornoDTO.id());
+        if (interacaoOp.isPresent()){
+            var interacao = new Interacoes();
+            BeanUtils.copyProperties(interacoesRetornoDTO, interacao);
+            return new InteracoesRetornoDTO(interacoesRepository.save(interacao));
+        }
+        throw new ClienteNotFoundException("Interação não encontrada!");
+    }
 
+    @Transactional
+    public void deleteById(Long id){
+        var interacao = interacoesRepository.findById(id);
+        if (interacao.isPresent()){
+            interacoesRepository.deleteById(interacao.get().getId());
+        }
+        throw new ClienteNotFoundException(String.format("Id: d% não encontrado no nosso banco de dados!", id));
     }
 }
